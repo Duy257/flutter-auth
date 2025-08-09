@@ -5,8 +5,9 @@ import 'services/auth_service.dart';
 import 'theme/app_theme.dart';
 import 'widgets/login_header.dart';
 import 'widgets/login_form.dart';
-import 'screens/user_profile_screen.dart';
+// import 'screens/user_profile_screen.dart';
 import 'models/auth_models.dart';
+// import 'screens/category_create_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -45,8 +46,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (mounted) {
       if (result.success) {
-        // Navigate to user profile screen or main app
+        // Navigate to home screen
         _showMessage(result.message ?? 'Đăng nhập thành công!', result.success);
+        Navigator.of(context).pushReplacementNamed('/home');
       } else {
         _showMessage(
           result.message ?? result.error ?? 'Unknown error',
@@ -88,13 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (mounted) {
       if (result.success && result.data is OAuthResponse) {
-        // Navigate to user profile screen
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) =>
-                UserProfileScreen(userResponse: result.data as OAuthResponse),
-          ),
-        );
+        // Navigate to home screen
+        Navigator.of(context).pushReplacementNamed('/home');
       } else {
         _showMessage(
           result.message ?? result.error ?? 'Unknown error',

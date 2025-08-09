@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_application_1/login_screen.dart';
+import 'package:flutter_application_1/services/backend_service.dart';
+import 'package:flutter_application_1/config/env_config.dart';
 
 void main() {
+  setUpAll(() async {
+    // Initialize environment config for tests
+    await EnvConfig.initialize();
+    // Initialize the backend service for tests
+    BackendService.initialize();
+  });
   group('LoginScreen Tests', () {
     testWidgets('LoginScreen displays all required elements', (
       WidgetTester tester,

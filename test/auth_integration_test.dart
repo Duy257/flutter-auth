@@ -1,12 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_application_1/models/auth_models.dart';
 import 'package:flutter_application_1/services/backend_service.dart';
+import 'package:flutter_application_1/config/env_config.dart';
 
 void main() {
+  setUpAll(() async {
+    // Initialize environment config for tests
+    await EnvConfig.initialize();
+    // Initialize the backend service for tests
+    BackendService.initialize();
+  });
   group('Auth Models Tests', () {
     test('OAuthResponse should parse JSON correctly', () {
       final json = {
-        'success': true,
+        'message': 'OAuth login successful',
         'user': {
           'id': '123',
           'name': 'John Doe',
@@ -14,20 +21,20 @@ void main() {
           'avatar': 'https://example.com/avatar.jpg',
           'role': 'user',
         },
-        'accessToken': 'access_token_123',
-        'refreshToken': 'refresh_token_123',
+        'token': 'jwt_token_123',
+        'exp': 1755368420,
       };
 
       final response = OAuthResponse.fromJson(json);
 
-      expect(response.success, true);
+      expect(response.message, 'OAuth login successful');
       expect(response.user.id, '123');
       expect(response.user.name, 'John Doe');
       expect(response.user.email, 'john@example.com');
       expect(response.user.avatar, 'https://example.com/avatar.jpg');
       expect(response.user.role, 'user');
-      expect(response.accessToken, 'access_token_123');
-      expect(response.refreshToken, 'refresh_token_123');
+      expect(response.token, 'jwt_token_123');
+      expect(response.exp, 1755368420);
     });
 
     test('UserInfo should handle missing avatar', () {

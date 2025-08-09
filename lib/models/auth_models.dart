@@ -1,31 +1,33 @@
 class OAuthResponse {
-  final bool success;
+  final String message;
   final UserInfo user;
-  final String accessToken;
-  final String refreshToken;
+  final String token;
+  final int exp;
 
   OAuthResponse({
-    required this.success,
+    required this.message,
     required this.user,
-    required this.accessToken,
-    required this.refreshToken,
+    required this.token,
+    required this.exp,
   });
 
   factory OAuthResponse.fromJson(Map<String, dynamic> json) {
     return OAuthResponse(
-      success: json['success'] ?? false,
-      user: UserInfo.fromJson(json['user']),
-      accessToken: json['accessToken'],
-      refreshToken: json['refreshToken'],
+      message: (json['message'] ?? '').toString(),
+      user: UserInfo.fromJson(json['user'] ?? {}),
+      token: (json['token'] ?? '').toString(),
+      exp: json['exp'] is int
+          ? json['exp'] as int
+          : int.tryParse(json['exp']?.toString() ?? '0') ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'success': success,
+      'message': message,
       'user': user.toJson(),
-      'accessToken': accessToken,
-      'refreshToken': refreshToken,
+      'token': token,
+      'exp': exp,
     };
   }
 }
@@ -36,6 +38,10 @@ class UserInfo {
   final String email;
   final String? avatar;
   final String role;
+  final String? googleId;
+  final bool isVerify;
+  final String createdAt;
+  final String updatedAt;
 
   UserInfo({
     required this.id,
@@ -43,6 +49,10 @@ class UserInfo {
     required this.email,
     this.avatar,
     required this.role,
+    this.googleId,
+    required this.isVerify,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory UserInfo.fromJson(Map<String, dynamic> json) {
@@ -52,6 +62,10 @@ class UserInfo {
       email: json['email'] ?? '',
       avatar: json['avatar'],
       role: json['role'] ?? 'user',
+      googleId: json['googleId'],
+      isVerify: json['isVerify'] ?? false,
+      createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
     );
   }
 
@@ -62,6 +76,10 @@ class UserInfo {
       'email': email,
       'avatar': avatar,
       'role': role,
+      'googleId': googleId,
+      'isVerify': isVerify,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 }
@@ -70,15 +88,9 @@ class OAuthRequest {
   final String tokenId;
   final String provider;
 
-  OAuthRequest({
-    required this.tokenId,
-    required this.provider,
-  });
+  OAuthRequest({required this.tokenId, required this.provider});
 
   Map<String, dynamic> toJson() {
-    return {
-      'tokenId': tokenId,
-      'provider': provider,
-    };
+    return {'tokenId': tokenId, 'provider': provider};
   }
 }

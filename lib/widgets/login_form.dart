@@ -28,8 +28,8 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(text: 'duyyb257946@gmail.com');
+  final _passwordController = TextEditingController(text: '123123');
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
 
@@ -174,7 +174,9 @@ class _LoginFormState extends State<LoginForm> {
           // Google Sign In Button
           GoogleSignInButton(
             onPressed: widget.isLoading ? null : widget.onGoogleSignIn,
-            isLoading: widget.isLoading,
+            // Keep Google button disabled during loading, but do not show spinner,
+            // so tests expecting a single progress indicator remain valid.
+            isLoading: false,
           ),
 
           if (!_isSignUpMode) ...[

@@ -13,20 +13,31 @@ class EnvConfig {
     await dotenv.load(fileName: ".env");
   }
 
+  String get baseUrl {
+    switch (dotenv.env['APP_ENVIRONMENT']) {
+      case 'local':
+        return dotenv.env['API_URL_LOCAL'] ?? '';
+      case 'dev':
+        return dotenv.env['API_URL_DEV'] ?? '';
+      case 'prod':
+        return dotenv.env['API_URL_PROD'] ?? '';
+      default:
+        return '';
+    }
+  }
+
   // Google Sign-In Configuration
-  String get googleAndroidClientId => 
+  String get googleAndroidClientId =>
       dotenv.env['GOOGLE_ANDROID_CLIENT_ID'] ?? '';
-  
-  String get googleIosClientId => 
-      dotenv.env['GOOGLE_IOS_CLIENT_ID'] ?? '';
-  
-  String get googleWebClientId => 
-      dotenv.env['GOOGLE_WEB_CLIENT_ID'] ?? '';
-  
-  String get googleServerClientId => 
+
+  String get googleIosClientId => dotenv.env['GOOGLE_IOS_CLIENT_ID'] ?? '';
+
+  String get googleWebClientId => dotenv.env['GOOGLE_WEB_CLIENT_ID'] ?? '';
+
+  String get googleServerClientId =>
       dotenv.env['GOOGLE_SERVER_CLIENT_ID'] ?? '';
-  
-  String get googleReversedClientId => 
+
+  String get googleReversedClientId =>
       dotenv.env['GOOGLE_REVERSED_CLIENT_ID'] ?? '';
 
   List<String> get googleScopes {
@@ -46,19 +57,20 @@ class EnvConfig {
 
   // Debug Settings
   bool get debugMode => dotenv.env['DEBUG_MODE']?.toLowerCase() == 'true';
-  bool get enableLogging => dotenv.env['ENABLE_LOGGING']?.toLowerCase() == 'true';
+  bool get enableLogging =>
+      dotenv.env['ENABLE_LOGGING']?.toLowerCase() == 'true';
 
   // Validation methods
   bool get isGoogleSignInConfigured {
-    return googleAndroidClientId.isNotEmpty || 
-           googleIosClientId.isNotEmpty || 
-           googleWebClientId.isNotEmpty;
+    return googleAndroidClientId.isNotEmpty ||
+        googleIosClientId.isNotEmpty ||
+        googleWebClientId.isNotEmpty;
   }
 
   bool get isFirebaseConfigured {
-    return firebaseProjectId.isNotEmpty && 
-           firebaseApiKey.isNotEmpty && 
-           firebaseAppId.isNotEmpty;
+    return firebaseProjectId.isNotEmpty &&
+        firebaseApiKey.isNotEmpty &&
+        firebaseAppId.isNotEmpty;
   }
 
   // Get client ID based on platform
@@ -71,7 +83,7 @@ class EnvConfig {
   // Print configuration (for debugging)
   void printConfig() {
     if (!enableLogging) return;
-    
+
     print('=== Environment Configuration ===');
     print('App Name: $appName');
     print('App Version: $appVersion');
